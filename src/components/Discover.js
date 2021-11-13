@@ -33,15 +33,15 @@ function Discover(props) {
                    placeholder="Search"
                    onKeyUp={(e) => setQuery(e.target.value)}
             />
-            <p className="text-xl font-medium mt-5 mb-5">Popular movies</p>
+            {query === '' && <p className="text-xl font-medium mt-5 mb-5">Popular movies</p>}
             <div className="grid grid-cols-3 gap-4">
                 {(query === '' ? popularMovies: searchedMovies).map(movie =>
-                        <MovieCard movie={movie}>
-                            <div className="flex flex-col items-end">
-                                <button className="bg-blue-100 p-1 pl-2 pr-2 rounded-md font-medium"
-                                        onClick={() => props.onWatchListAdd(movie)}>+ WATCH LIST</button>
-                            </div>
-                        </MovieCard>)}
+                    <MovieCard key={movie.id} movie={movie}>
+                        <div className="flex flex-col items-end">
+                            <button className="bg-blue-100 p-1 pl-2 pr-2 rounded-md font-medium"
+                                    onClick={() => props.onWatchListAdd(movie)}>+ WATCH LIST</button>
+                        </div>
+                    </MovieCard>)}
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import Discover from "../components/Discover";
 import Sidebar from "../components/Sidebar";
 import Watched from "../components/Watched";
 import {useEffect, useState} from "react";
-import {addToWatchList, getWatchList} from "../services/MovieService";
+import {addToWatchList, addToWatchedList, getWatchList, getWatchedList} from "../services/MovieService";
 
 const WATCH_LIST = 1;
 const DISCOVER = 2;
@@ -12,15 +12,36 @@ const WATCHED = 3;
 function Home() {
     const [currentComponent, setCurrentComponent] = useState(WATCH_LIST);
     const [watchList, setWatchList] = useState([]);
+    const [watchedList, setWatchedList] = useState([]);
 
     useEffect(() => {
         setWatchList(getWatchList());
+        setWatchedList(getWatchedList());
     }, []);
 
     const navigate = (component) => {
       if (currentComponent !== component) {
           setCurrentComponent(component);
       }
+    };
+
+    /**
+     *
+     * @param {Movie} movie
+     */
+    const onWatchListAdd = (movie) => {
+        addToWatchList(movie);
+        setWatchList(getWatchList());
+    };
+
+    /**
+     *
+     * @param {Movie} movie
+     */
+    const onWatchedListAdd = (movie) => {
+        addToWatchedList(movie)
+        setWatchList(getWatchList());
+        setWatchedList(getWatchedList());
     };
 
     return (
@@ -42,16 +63,13 @@ function Home() {
                 </nav>
                 <main>
                     <div className={currentComponent !== WATCH_LIST ? 'hidden' : ''}>
-                        <WatchList watchList={watchList} />
+                        <WatchList watchList={watchList} onWatchedListAdd={movie => onWatchedListAdd(movie)} />
                     </div>
                     <div className={currentComponent !== DISCOVER ? 'hidden' : ''}>
-                        <Discover onWatchListAdd={(movie) => {
-                            addToWatchList(movie)
-                            setWatchList(getWatchList())}
-                        } />
+                        <Discover onWatchListAdd={movie => onWatchListAdd(movie)} />
                     </div>
                     <div className={currentComponent !== WATCHED ? 'hidden' : ''}>
-                        <Watched />
+                        <Watched watchedList={watchedList} />
                     </div>
                 </main>
             </div>

@@ -41,11 +41,30 @@ async function findMovies(query) {
  * @param {Movie} movie
  */
 function addToWatchList(movie) {
-    const watchList = getWatchList();
-    if (!watchList.some(m => m.id === movie.id)) {
-        watchList.push(movie);
-        saveWatchList(watchList);
+    const movieList = getMovieList();
+    if (!movieList.some(m => m.id === movie.id)) {
+        movieList.push(movie);
+        saveMovieList(movieList);
     }
+}
+
+/**
+ *
+ * @param {Movie} movie
+ */
+function addToWatchedList(movie) {
+    const movieList = getMovieList();
+    const savedMovie = movieList.find(m => m.id === movie.id);
+    savedMovie.watched = true;
+    saveMovieList(movieList);
+}
+
+/**
+ *
+ * @returns {Movie[]}
+ */
+function getMovieList() {
+    return JSON.parse(localStorage.getItem('movieList')) ?? [];
 }
 
 /**
@@ -53,15 +72,25 @@ function addToWatchList(movie) {
  * @returns {Movie[]}
  */
 function getWatchList() {
-    return JSON.parse(localStorage.getItem('watchList')) ?? [];
+    const movieList = getMovieList();
+    return movieList.filter(m => !m.watched);
 }
 
 /**
  *
- * @param {Movie[]} watchList
+ * @returns {Movie[]}
  */
-function saveWatchList(watchList) {
-    localStorage.setItem('watchList', JSON.stringify(watchList));
+function getWatchedList() {
+    const movieList = getMovieList();
+    return movieList.filter(m => m.watched);
 }
 
-export {getPopularMovies, findMovies, addToWatchList, getWatchList};
+/**
+ *
+ * @param {Movie[]} movieList
+ */
+function saveMovieList(movieList) {
+    localStorage.setItem('movieList', JSON.stringify(movieList));
+}
+
+export {getPopularMovies, findMovies, addToWatchList, addToWatchedList, getWatchedList, getWatchList};
