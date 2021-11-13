@@ -6,6 +6,8 @@ import {useEffect, useState} from "react";
  *
  * @param props
  * @param {(Movie) => void} props.onWatchListAdd
+ * @param {Map<number, boolean>} props.movieToWatched
+ * @param {(Movie) => void} props.onWatchedListAdd
  * @returns {JSX.Element}
  * @constructor
  */
@@ -38,8 +40,17 @@ function Discover(props) {
                 {(query === '' ? popularMovies: searchedMovies).map(movie =>
                     <MovieCard key={movie.id} movie={movie}>
                         <div className="flex flex-col items-end">
-                            <button className="bg-blue-100 p-1 pl-2 pr-2 rounded-md font-medium"
-                                    onClick={() => props.onWatchListAdd(movie)}>+ WATCH LIST</button>
+                            <button className={`p-1 pl-2 pr-2 rounded-md font-medium 
+                                                ${props.movieToWatched.get(movie.id) ? 'bg-gray-100' : 'bg-blue-100'}`}
+                                    disabled={props.movieToWatched.get(movie.id)}
+                                    onClick={() => props.movieToWatched.has(movie.id)
+                                        ? props.onWatchedListAdd(movie)
+                                        : props.onWatchListAdd(movie)}
+                            >
+                                {props.movieToWatched.has(movie.id)
+                                    ? (props.movieToWatched.get(movie.id) ? 'WATCHED' : '+ WATCHED')
+                                    : '+ WATCHLIST'}
+                            </button>
                         </div>
                     </MovieCard>)}
             </div>

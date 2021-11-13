@@ -66,7 +66,10 @@ function Home() {
                         <WatchList watchList={watchList} onWatchedListAdd={movie => onWatchedListAdd(movie)} />
                     </div>
                     <div className={currentComponent !== DISCOVER ? 'hidden' : ''}>
-                        <Discover onWatchListAdd={movie => onWatchListAdd(movie)} />
+                        <Discover
+                            movieToWatched={new Map([...watchList, ...watchedList].map(m => [m.id, m.watched]))}
+                            onWatchedListAdd={movie => onWatchedListAdd(movie)}
+                            onWatchListAdd={movie => onWatchListAdd(movie)} />
                     </div>
                     <div className={currentComponent !== WATCHED ? 'hidden' : ''}>
                         <Watched watchedList={watchedList} />
