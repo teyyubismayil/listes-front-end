@@ -6,7 +6,7 @@ import Movie from "../models/Movie";
  * @returns {Promise<Movie[]>}
  */
 async function getPopularMovies(page = 1) {
-    const result = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=f6473e4d474a28fd8ca9acd9b4409211&page=${page}`);
+    const result = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=API_KEY&page=${page}`);
     const json = await result.json();
     const movies = json.results;
     return movies.map(movieDto =>
@@ -24,7 +24,7 @@ async function getPopularMovies(page = 1) {
  * @returns {Promise<Movie[]>}
  */
 async function findMovies(query) {
-    const result = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=f6473e4d474a28fd8ca9acd9b4409211&query=${query}`);
+    const result = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=API_KEY&query=${query}`);
     const json = await result.json();
     const movies = json.results;
     return movies.map(movieDto =>
